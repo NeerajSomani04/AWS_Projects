@@ -1,0 +1,10 @@
+Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse
+
+AWS Database Migration Service and AWS Schema Conversion Tool make it easier to migrate your schema and data from your Oracle data warehouse, both on-premises and on AWS, to Amazon Redshift without disruption to the applications that rely on the data source.
+
+AWS Schema Conversion Tool (AWS SCT) --> automatically convert the source schema and majority of the custom code to a format compatible with Amazon Redshift. 
+AWS SCT clearly marks any code that it cannot convert so that you can manually convert it.
+
+AWS Database Migration Service (AWS DMS) --> begin the data migration with just a few clicks in the AWS Management Console. The source data warehouse remains fully operational during the migration.
+ 
+Perform post-migration activities such as running SQL queries to validate object types, object count, and number of rows for each table between source and target data warehouses.
