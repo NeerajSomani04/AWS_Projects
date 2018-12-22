@@ -50,34 +50,45 @@ INSERT INTO dkothari_loan VALUES (112, 1, 'Term loan product','2018-01-23', 100.
 INSERT INTO dkothari_loan VALUES (113, 3, 'Line of Credit', '2018-02-23', 100.00); 
 INSERT INTO dkothari_loan VALUES (114, 4, 'Line of Credit', '2018-03-31', 100.00);
 INSERT INTO dkothari_loan VALUES (115, 7, 'Line of Credit', '2018-04-01', 100.00);
+INSERT INTO dkothari_loan VALUES (116, 1, 'Line of Credit', '2018-01-07', 100.00); 
 
 
 ----- probable solution for 1st question --
-1. select A.country_name, B.loan_funded_date, sum(B.loan_amount) 
+1. select temp.country_name from (select A.country_name, CONCAT(YEAR(B.loan_funded_date),'-Q',QUARTER(B.loan_funded_date)) as year_qtr, sum(B.loan_amount) as highest_volume_loan
 from dkothari_merchant A join dkothari_loan B 
 on A.merchant_id = B.merchant_id
-group by A.country_name, B.loan_funded_date
-having B.loan_funded_date between '2018-01-01' and '2018-03-31';
+group by A.country_name, year_qtr
+having year_qtr = '2018-Q1'
+order by highest_volume_loan desc) as temp limit 1;
 
 
-select A.country_name, QUARTER(B.loan_funded_date) as Loan_Date_Quarter, sum(B.loan_amount) 
-from dkothari_merchant A join dkothari_loan B 
-on A.merchant_id = B.merchant_id
-group by A.country_name, B.loan_funded_date
-having Loan_Date_Quarter = 1;
+2. select distinct A.merchant_id, B.product_type 
+from dkothari_merchant A left outer join dkothari_loan B
+on A.merchant_id=B.merchant_id
+order by A.merchant_id;
 
-select A.country_name, QUARTER(B.loan_funded_date) as Loan_Date_Quarter, sum(B.loan_amount) 
-from dkothari_merchant A join dkothari_loan B 
-on A.merchant_id = B.merchant_id
-group by A.country_name
-having Loan_Date_Quarter = 1;
+Assumption 1 --> we want to print the list of merchant with there respective type of products taken in the past.
 
 
+Assumption 2 --> we want to get the count and type together.
 
-select loan_funded_date from dkothari_loan where loan_funded_date = '2018-01-23'
+select temp.merchant_id, temp.product_type, count(*) OVER (PARTITION BY temp.merchant_id) as count_products_type 
+from 
+(select distinct A.merchant_id, IFNULL(B.product_type, 'NONE')
+from dkothari_merchant A left outer join dkothari_loan B
+on A.merchant_id=B.merchant_id
+order by A.merchant_id) as temp;
 
-for oracle qurterly calculation --
-https://www.tek-tips.com/viewthread.cfm?qid=1703809
+select temp.merchant_id, count(*) OVER (PARTITION BY temp.merchant_id) as count_products_type 
+from (select distinct A.merchant_id
+from dkothari_merchant A left outer join dkothari_loan B
+on A.merchant_id=B.merchant_id
+order by A.merchant_id) as temp;
+
+
+select merchant_id, count(product_type) OVER (PARTITION BY merchant_id) as count_products_type  from dkothari_loan;
+
+Assumption 3 --> One merchant can get same type of loan multiple times with-in same year without any restriction.
 
 
 
