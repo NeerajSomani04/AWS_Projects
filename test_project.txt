@@ -89,6 +89,12 @@ WHERE type = 'PC'
 ) Ranked_makers
 WHERE rnk = 3;
 
+select *, rank() over(partition by temp.highest_volume_loan order by temp.country_name) rank_country from (select A.country_name, CONCAT(YEAR(B.loan_funded_date),'-Q',QUARTER(B.loan_funded_date)) as year_qtr, sum(B.loan_amount) as highest_volume_loan
+from dkothari_merchant A join dkothari_loan B 
+on A.merchant_id = B.merchant_id
+group by A.country_name, year_qtr
+having year_qtr = '2018-Q1'
+order by highest_volume_loan desc) as temp;
 
 
 2. select distinct A.merchant_id, B.product_type 
