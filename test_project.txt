@@ -48,18 +48,47 @@ INSERT INTO dkothari_merchant VALUES (22, 'China');
 INSERT INTO dkothari_loan VALUES (111, 1, 'Line of Credit', '2018-01-23', 100.00); 
 INSERT INTO dkothari_loan VALUES (112, 1, 'Term loan product','2018-01-23', 100.00); 
 INSERT INTO dkothari_loan VALUES (113, 3, 'Line of Credit', '2018-02-23', 100.00); 
-INSERT INTO dkothari_loan VALUES (114, 4, 'Line of Credit', '2018-03-31', 100.00);
+INSERT INTO dkothari_loan VALUES (114, 4, 'Term loan product', '2018-03-31', 100.00);
 INSERT INTO dkothari_loan VALUES (115, 7, 'Line of Credit', '2018-04-01', 100.00);
-INSERT INTO dkothari_loan VALUES (116, 1, 'Line of Credit', '2018-01-07', 100.00); 
+INSERT INTO dkothari_loan VALUES (116, 1, 'Line of Credit', '2018-01-07', 100.00);
+INSERT INTO dkothari_loan VALUES (117, 6, 'Line of Credit', '2018-02-24', 100.00); 
+INSERT INTO dkothari_loan VALUES (118, 9, 'Line of Credit', '2018-02-20', 100.00); 
+INSERT INTO dkothari_loan VALUES (119, 10, 'Term loan product', '2018-03-20', 100.00); 
+INSERT INTO dkothari_loan VALUES (120, 13, 'Term loan product', '2018-02-11', 100.00); 
+
+
 
 
 ----- probable solution for 1st question --
+Assumption:- Same merchant can apply for similar product_type loan multiple times. However, this will not impact calculation strategy. 
+
+
+
 1. select temp.country_name from (select A.country_name, CONCAT(YEAR(B.loan_funded_date),'-Q',QUARTER(B.loan_funded_date)) as year_qtr, sum(B.loan_amount) as highest_volume_loan
 from dkothari_merchant A join dkothari_loan B 
 on A.merchant_id = B.merchant_id
 group by A.country_name, year_qtr
 having year_qtr = '2018-Q1'
 order by highest_volume_loan desc) as temp limit 1;
+
+If we want to get list of all the countries with the highest volume (based on loan_amount) of loans funded in 2018Q1, means if two or more countries having ties than we can use below SQL to get that list of countries.
+
+select temp.country_name, rank() over(partition by temp.highest_volume_loan) rank_country from (select A.country_name, CONCAT(YEAR(B.loan_funded_date),'-Q',QUARTER(B.loan_funded_date)) as year_qtr, sum(B.loan_amount) as highest_volume_loan
+from dkothari_merchant A join dkothari_loan B 
+on A.merchant_id = B.merchant_id
+group by A.country_name, year_qtr
+having year_qtr = '2018-Q1'
+order by highest_volume_loan desc) as temp;
+
+
+SELECT maker 
+FROM (
+SELECT maker, RANK() OVER(PARTITION BY maker ORDER BY model) rnk
+FROM Product 
+WHERE type = 'PC'
+) Ranked_makers
+WHERE rnk = 3;
+
 
 
 2. select distinct A.merchant_id, B.product_type 
