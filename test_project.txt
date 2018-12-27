@@ -140,4 +140,23 @@ CREATE TABLE dkothari_loan_stg (
 
 
 
+Insert into loan values (1001, 1, 100, '2018-12-27'); 
+Insert into funding_source_stg values (1, 'CITI Bank', 'gkhkj1322gjgkkui'); 
 
+delete from loan_stg where loan_id = 1001;
+
+Insert into loan_stg values (1001, 1, 100, '2018-12-27', 'ghgkj1223368jhjghj'); 
+
+Insert into dim_funding_source values (111, 1, 'CITI Bank', '2018-12-26', '2018-12-31', 'I');
+Insert into dim_funding_source values (112, 2, 'Bank Of America', '2018-12-26', '2018-12-31', 'I');
+
+delete from fact_loan where seq_id = 1111;
+Insert into fact_loan values (1111, 1001, 112, 2, 100, '2018-12-26', '2018-12-26', '2018-12-27', 'I'); 
+Insert into fact_loan values (1112, 1001, 111, 1, 100, '2018-12-27', '2018-12-27', '2018-12-31', 'U'); 
+
+select * from loan;
+select * from funding_source;
+select * from loan_stg;
+select * from funding_source_stg;
+select * from dim_funding_source;
+select * from fact_loan;
