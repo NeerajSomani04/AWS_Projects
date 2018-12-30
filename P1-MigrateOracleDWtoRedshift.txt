@@ -8,3 +8,23 @@ AWS SCT clearly marks any code that it cannot convert so that you can manually c
 AWS Database Migration Service (AWS DMS) --> begin the data migration with just a few clicks in the AWS Management Console. The source data warehouse remains fully operational during the migration.
  
 Perform post-migration activities such as running SQL queries to validate object types, object count, and number of rows for each table between source and target data warehouses.
+
+Technologies and tools --> 
+1. Redshift 2. RDS for Oracle 3. DMS 4. SCT
+--> AWS Virtual Private Cloud, security groups, Cloudformation and SQL knowledge is must
+
+Benefits --> 
+1. increasing performance while saving costs
+2. Redshift delivers fast query performance by using columnar storage technology to improve I/O efficiency and parallelizing queries across multiple nodes. 
+3. You can have unlimited number of users doing unlimited analytics on all your data for just $1,000 per terabyte per year, which is 1/10th the cost of traditional data warehouse solutions. 
+4. easily resize your cluster up and down, as your performance and capacity needs change, with just a few clicks in the console or a simple API call.
+5. Redshift allows you to easily automate most of the common administrative tasks to manage, monitor, and scale your data warehouse
+
+
+DMS --> 
+1. Created tasks to migrate data quickly and easily with minimual to no monitoring and deployment efforts.
+2. Data moved from heterogenious data bases to Redshift.
+3. AWS DMS service support CDC operations as well. This is very easy configuration as compared to complete ETL process.
+
+SCT --> automatically converting the source schema to Redshift compatible schema
+
