@@ -1,0 +1,5 @@
+Project Distription --<>
+
+1. Collect data from IOT sensors using IOT Device SDKs and pass it to Kinesis Firehose for further Analytics. Finally stored in S3 and a QuickSight Visualization is implemented on top of this data.
+
+2. 
